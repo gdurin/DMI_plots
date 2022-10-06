@@ -24,3 +24,11 @@ Pre-print available [on ArXiv](https://arxiv.org/abs/2009.11830)
 
 ## This notebook generates figs. 28 and 29 of the paper, and other statistics
 
+# Notes on installation
+Running this notebook in JupyterLab or as old Notebook should give an error when a package is not installed.
+Simply "pip install package" and restart the kernel
+
+In case you receive the message
+"RuntimeError: node.js v14.0.0 or higher is needed to allow compilation of custom models ("conda install nodejs" or follow https://nodejs.org/en/download/)"
+please follow the https://nodejs.org/en/download link and install node.js for your distribution.
+
