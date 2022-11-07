@@ -23,12 +23,13 @@ To be published on Review of Modern Physics
 Pre-print available [on ArXiv](https://arxiv.org/abs/2009.11830)
 
 # Install the notebook and you can use the electronic version of figs. 28 and 29 of the paper.
-# Do you want to contribute to keep the DMI database update?
 
 This notebook has many purposes: 
 1. it generates the electronic version of figs. 28 and 29 of the paper, so you can hoove with the mouse over the bars to get info about the paper and the measurement. 
 1. it outputs general statistics about available DMI data
 1. it offers the opportunity to keep the database available when new data are available (or have been missed)
+
+# Do you want to contribute to keep the DMI database update?
 
 Please write to g.durin at inrim.it for adding new data, or [open an issue](https://github.com/gdurin/DMI_plots/issues)
 
