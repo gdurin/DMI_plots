@@ -19,8 +19,8 @@ Dipartimento di Fisica e Geologia, Università di Perugia, Via Pascoli, 06123 Pe
 
 The Dzyaloshinskii-Moriya interaction (DMI), being one of the origins of chiral magnetism, is currently attracting considerable attention in the research community focusing on applied magnetism and spintronics. For future applications, an accurate measurement of its strength is indispensable. Here we present a review of the state-of-the-art of measuring the coefficient of the Dzyaloshinskii-Moriya interaction, the DMI constant D, focusing on systems where the interaction arises from the interface between two materials (i.e. interfacial DMI). We give an overview of the experimental techniques as well as their theoretical background and models for the quantification of the DMI constant. The measurement techniques are divided into three categories: a) domain wall-based measurements, b) spin wave-based measurements and c) spin-orbit torque-based measurements. We analyze the advantages and disadvantages of each method and compare D values at different interfaces. The review aims to obtain a better understanding of the applicability of the different techniques to various stacks and of the origin of apparent disagreements among literature values.
 
-To be published on Review of Modern Physics   
-Pre-print available [on ArXiv](https://arxiv.org/abs/2009.11830)
+To be published on [Review of Modern Physics, vol 95](https://journals.aps.org/rmp/accepted/3f07aE95P3317b0e11160273100d47cb2451f6f83)
+Pre-print available on [ArXiv](https://arxiv.org/abs/2009.11830)
 
 # Install the notebook and you can use the electronic version of figs. 28 and 29 of the paper.
 
@@ -29,7 +29,7 @@ This notebook has many purposes:
 1. it outputs general statistics about available DMI data
 1. it offers the opportunity to keep the database available when new data are available (or have been missed)
 
-# Do you want to contribute to keep the DMI database update?
+# Do you want to contribute to keep the DMI database updated?
 
 Please write to g.durin at inrim.it for adding new data, or [open an issue](https://github.com/gdurin/DMI_plots/issues)
 
