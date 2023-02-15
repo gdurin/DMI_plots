@@ -293,15 +293,14 @@ class DMI:
 	def print_most_popular_stacks(self, fm=None,nfirst=15):
 		data = self.all_data_df[self.all_data_df.Note!='To fix']
 		if fm == None:
-			q = data.groupby(['top','fm','bottom']).size().sort_values(ascending=False)[:nfirst]
+			q = data.groupby(['bottom','fm','top']).size().sort_values(ascending=False)[:nfirst]
 		else:
 			data = data[data.fm==fm]
 			#print(fm)
-			q = data.groupby(['top','bottom']).size().sort_values(ascending=False)[:nfirst]
+			q = data.groupby(['bottom','top']).size().sort_values(ascending=False)[:nfirst]
 		q = q.to_frame()
 		q.columns = ['n']
-		q = q.T
-		#display(q)
+		display(q)
 		return q
 		
 	def plotStack(self, stack, select_D="Ds", 
@@ -326,16 +325,16 @@ class DMI:
 				show(fig_out, notebook_handle=True)
 			return fig_out
 		else:
-			fig_out, fig_anular = self._elementsVsThickness(stack, select_D, 
+			(fig_XY, fig_anular), df_annular = self._elementsVsThickness(stack, select_D, 
 					size_factor, alpha, 
 					figsizeX, marker_type, marker_colors, handle_color, set_axis,
 					ndots, visualization_library)
 			#print("Plot Element vs Thickness")
 			if visualization_library == 'bokeh' and is_XY_to_plot:
-				show(fig_out, notebook_handle=True)
+				show(fig_XY, notebook_handle=True)
 			if fig_anular is not None:
 				show(fig_anular, notebook_handle=True)
-			return fig_out, fig_anular
+			return (fig_XY, fig_anular), df_annular
 		
 
 	def _get_elements(self, stack):
@@ -624,8 +623,10 @@ class DMI:
 				if show_annular_plot:
 					fig_annular = self.plot_annular(self.data, elements, telements,
 																					title=title_stack, xlabel=xlabel)
-					return fig, fig_annular
-		return fig, None
+					df_annular = self.df_annular[list(self.df_annular.columns[:23]) + ['method']]
+					return (fig, fig_annular), df_annular
+
+		return (fig, None), None
 
 	def plot_annular(self, df_data, elements, telements, 
 									max_thickness=6, step_tickness=0.5, xlabel=None, title=None):
@@ -664,16 +665,9 @@ class DMI:
 				print('Element %s non available' % element)
 				colors.append('#000000') #
 
-		#greens = ['#002510'] + list(palettes.Greens9)[:-1]
-		#oranges = ['#5c1a09'] + list(palettes.Oranges9)[:-1]
-		#greens = list(palettes.Greens9)
-		#oranges = list(palettes.Oranges9)
-
-
 		methods_colors_red = [redColors[m] for m in methods_with_sign]
 		methods_colors_green = [greenColors[m] for m in methods_with_sign]
 		methods_colors_gray = [grayColors[m] for m in methods_no_sign]
-
 		
 		clrs = []
 		for Ds, sign, method in zip(self.df_annular.Ds, self.df_annular.is_sign_given, self.df_annular.method):
@@ -691,13 +685,7 @@ class DMI:
 		self.df_annular.loc[:,'fill_color'] = clrs
 
 
-		width = 800
-		height = 800
-		inner_radius = 70
-		outer_radius = 270
-		Y0 = 30
-		
-
+		width, height, inner_radius, outer_radius, Y0 = 800, 800, 70, 270, 30
 		minr, maxr = 0, max(abs(self.df_annular.Ds))
 		a = (outer_radius - inner_radius) / (maxr - minr)
 		
@@ -714,8 +702,6 @@ class DMI:
 							('D_s', '@Ds_string (@method)'), 
 							('Paper', '@Author, @Title, @Journal @Volume, @Pages (@Year)'),
 							('', 20*'-')]
-
-		#[output_file(filename="custom_filename.html", title="Static HTML file")
 
 		p = figure(width=width, height=height, title="",
 			x_axis_type=None, y_axis_type=None,
@@ -741,15 +727,6 @@ class DMI:
 		c0 = big_angle / max_thickness * self.df_annular[tlayer]
 		self.df_annular.loc[:,'angle0'] =  _angles - c0 + small_angle/2
 		self.df_annular.loc[:,'angle1'] =  self.df_annular['angle0'] - small_angle
-
-		#self.df_annular.loc[:,'hatch_patterns'] = [hatch_patterns[method] for method in self.df_annular['method']]
-
-		#angle0 =  -big_angle + _angles + (self.df_annular[tlayer]/step_tickness) * small_angle
-		#angle1 =  angle0 + small_angle
-
-
-		#self.df_annular.loc[:,'angle1'] = self.df_annular['fill_color']
-
 		angles = np.pi/2 - big_angle/2 - np.arange(n_sectors+1) * big_angle
 		p.annular_wedge(0, Y0, inner_radius, outer_radius*1.02, -big_angle+angles, angles, color=colors,
 										inner_radius_units='data', outer_radius_units='data')
@@ -782,11 +759,6 @@ class DMI:
 										text_font_size = "8px", text='ns', angle='tick_angles', source=source_label,
 										text_align='center')
 		p.add_layout(lbtk)
-		#angle = -big_angle + angles[1]
-		#lbtk1 = Label(x=R0*np.cos(angle), y=R0*np.sin(angle),y_offset=Y0, 
-		#								text_font_size = "10px", text=str(max_thickness), angle=angle-np.pi/2)
-		#p.add_layout(lbtk1)
-
 
 		# small wedges
 		p.annular_wedge(0, Y0, inner_radius=inner_radius, outer_radius='rads',
@@ -794,8 +766,6 @@ class DMI:
 		  				fill_color='fill_color', 
 		  				line_color='black',
 		  				hatch_color=None,
-		  				#hatch_pattern='hatch_patterns',
-		  				#hatch_scale=.5,
 		  				name = "DsValues",
 		  				direction='clock',
 		  				source=self.df_annular,
@@ -803,12 +773,9 @@ class DMI:
 
 
 		# circular axes and lables
-
 		n_radii = int(maxr / 0.5) + 1
 		labels = np.arange(n_radii) * 0.5
 		radii = inner_radius + a * labels
-		
-
 		p.circle(0, Y0, radius=radii, fill_color=None, line_color="grey", radius_units='data')
 		p.arc(0, Y0,radius=outer_radius*1.02, start_angle = np.pi/2 + big_angle/2, end_angle = np.pi/2 - big_angle/2, 
 					radius_units='data', color='black')
@@ -835,11 +802,7 @@ class DMI:
 
 		# Color patterns
 		h = outer_radius + 15
-		x0 = -h
-		y0 = -h-5
-		l0 = 15
-		dy = 30
-
+		x0, y0, l0, dy = -h, -h-5, 15, 30
 		xs = x0 + l0 * np.arange(len(methods_with_sign))
 		ys = np.array(len(methods_with_sign) * [y0+l0])
 		p.rect(xs, ys, width=l0, height=l0, line_color='black',fill_color=methods_colors_red)
@@ -866,8 +829,6 @@ class DMI:
 						text_align="left", text_baseline="middle")		
 
 
-
-
 		# # OK, these hand drawn legends are pretty clunky, will be improved in future release
 		x0 += 5
 		y0 = h - 10
@@ -878,7 +839,7 @@ class DMI:
 									text_align="left", text_baseline="middle")
 			p.add_layout(lbm)
 		
-# Add the stack at the top of the plot
+		# Add the stack at the top of the plot
 		if title:
 				lb_title = Label(x=0, y=y0+55, text=title, text_font_size="30px",
 									text_align="center", text_baseline="middle")
@@ -890,7 +851,6 @@ class DMI:
 				p.add_layout(lb_title)
 		
 
-
 		if oxides_selected:
 			x0 += 530
 			p.rect(x0, y0, width=3*l0, height=l0,
@@ -900,11 +860,9 @@ class DMI:
 			p.add_layout(lbo)
 
 		if xlabel:
-			self.write_curved_text(xlabel, p, R=inner_radius-25, y_offset=Y0)		
-
-		#show(p)
-		#save(p)
+			self.write_curved_text(xlabel, p, R=inner_radius-25, y_offset=Y0)
 		return p
+
 
 	def write_curved_text(self, text, fig, white_spaces=0, R=60, y_offset=None, is_curved=False):
 		"""
@@ -1054,8 +1012,6 @@ class DMI:
 			print("%s, %s, %s" % tuple([k.split("_") for k in key.split("__")]))
 			print(self.n_experiments[key].to_string())
 			print(80*"*")
-
-
 
 	
 	def print_stack_tables(self, stack, useJupyter=False):
