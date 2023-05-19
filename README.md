@@ -19,7 +19,7 @@ Dipartimento di Fisica e Geologia, Università di Perugia, Via Pascoli, 06123 Pe
 
 The Dzyaloshinskii-Moriya interaction (DMI), being one of the origins of chiral magnetism, is currently attracting considerable attention in the research community focusing on applied magnetism and spintronics. For future applications, an accurate measurement of its strength is indispensable. Here we present a review of the state-of-the-art of measuring the coefficient of the Dzyaloshinskii-Moriya interaction, the DMI constant D, focusing on systems where the interaction arises from the interface between two materials (i.e. interfacial DMI). We give an overview of the experimental techniques as well as their theoretical background and models for the quantification of the DMI constant. The measurement techniques are divided into three categories: a) domain wall-based measurements, b) spin wave-based measurements and c) spin-orbit torque-based measurements. We analyze the advantages and disadvantages of each method and compare D values at different interfaces. The review aims to obtain a better understanding of the applicability of the different techniques to various stacks and of the origin of apparent disagreements among literature values.
 
-Published on [Review of Modern Physics, vol 95](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.95.015003)
+Published on [Review of Modern Physics, vol 95](https://doi.org/10.1103/RevModPhys.95.015003)
 Pre-print available on [ArXiv](https://arxiv.org/abs/2009.11830)
 
 # Install the notebook and you can use the electronic version of figs. 28 and 29 of the paper.
